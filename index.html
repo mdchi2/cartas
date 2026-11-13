@@ -1,1207 +1,1200 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CARTAS COLECCIONABLES</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0c0f17;
-            --bg-card: #151b28;
-            --border-card: #253046;
-            --accent-gold: #f59e0b;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: radial-gradient(circle at top, #182236 0%, var(--bg-main) 70%);
-            color: var(--text-main);
-            font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* HEADER RESPONSIVO */
-        header {
-            padding: 16px 20px;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(12, 15, 23, 0.85) 100%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            position: sticky;
-            top: 0;
-            backdrop-filter: blur(14px);
-            z-index: 50;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .header-text {
-            text-align: left;
-        }
-
-        .header-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(1.8rem, 5vw, 3.2rem);
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #f43f5e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 25px rgba(245, 158, 11, 0.25);
-            line-height: 1;
-        }
-
-        .header-subtitle {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 3px;
-        }
-
-        /* BOTÓN DE CARRITO EN HEADER */
-        .btn-cart-toggle {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: #fff;
-            border: 1px solid #3b82f6;
-            padding: 9px 15px;
-            border-radius: 999px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .btn-cart-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
-        }
-
-        .cart-badge {
-            background: #ef4444;
-            color: #fff;
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 7px;
-            border-radius: 999px;
-        }
-
-        /* CONTROLES Y FILTROS */
-        .controls-container {
-            max-width: 1200px;
-            margin: 18px auto 8px;
-            padding: 0 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .controls-container {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 20px;
-            }
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .filter-buttons::-webkit-scrollbar {
-            display: none;
-        }
-
-        .btn-filter {
-            background: #1e293b;
-            color: var(--text-muted);
-            border: 1px solid var(--border-card);
-            padding: 7px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8rem;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .btn-filter.active {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border-color: #60a5fa;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .search-box {
-                max-width: 260px;
-            }
-        }
-
-        .search-box input {
-            width: 100%;
-            background: #111827;
-            border: 1px solid var(--border-card);
-            border-radius: 999px;
-            padding: 8px 16px 8px 36px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.88rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        .search-box input:focus {
-            border-color: var(--accent-blue);
-        }
-
-        .search-box svg {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            fill: var(--text-muted);
-        }
-
-        .stats-bar {
-            max-width: 1200px;
-            margin: 6px auto 18px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        @media (min-width: 768px) {
-            .stats-bar {
-                padding: 0 20px;
-                justify-content: flex-start;
-                gap: 20px;
-            }
-        }
-
-        .stat-item strong {
-            color: #f1f5f9;
-        }
-
-        /* GRID DE CARTAS - ADAPTADO CELULAR Y PC */
-        .cards-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 12px;
-            display: grid;
-            /* Celulares: 2 columnas */
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        /* Tablets chicas: 3 columnas */
-        @media (min-width: 540px) {
-            .cards-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
-                padding: 0 16px;
-            }
-        }
-
-        /* Tablets / Laptops: 4 columnas */
-        @media (min-width: 820px) {
-            .cards-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-                padding: 0 20px;
-            }
-        }
-
-        /* PC Escritorio: 5 columnas */
-        @media (min-width: 1080px) {
-            .cards-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 24px;
-            }
-        }
-
-        /* CADA TARJETA DE CARTA */
-        .sticker-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            border: 1px solid var(--border-card);
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
-            overflow: hidden;
-        }
-
-        @media (min-width: 768px) {
-            .sticker-card {
-                padding: 10px;
-                border-radius: 16px;
-            }
-            .sticker-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 14px 26px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.2);
-                border-color: rgba(96, 165, 250, 0.5);
-            }
-        }
-
-        .sticker-card.in-cart {
-            border-color: rgba(16, 185, 129, 0.5);
-        }
-
-        .in-cart-indicator {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(16, 185, 129, 0.95);
-            color: #fff;
-            font-size: 0.64rem;
-            font-weight: 800;
-            padding: 2px 7px;
-            border-radius: 5px;
-            z-index: 10;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-            display: none;
-        }
-
-        .sticker-card.in-cart .in-cart-indicator {
-            display: block;
-        }
-
-        /* CONTENEDOR DE IMAGEN */
-        .crop-viewport {
-            width: 100%;
-            aspect-ratio: 245 / 325;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #0b0e14;
-            position: relative;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .crop-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.25s ease;
-        }
-
-        /* DETALLES DE LA CARTA */
-        .card-info {
-            padding: 8px 2px 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.25rem;
-            letter-spacing: 0.5px;
-            color: #fff;
-        }
-
-        .card-sheet {
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.06);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        /* BOTON AGREGAR $ 500 */
-        .btn-add-cart {
-            margin-top: 6px;
-            width: 100%;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            border: 1px solid #3b82f6;
-            color: #fff;
-            padding: 8px 6px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .btn-add-cart:active {
-            transform: scale(0.97);
-        }
-
-        .btn-add-cart .price-tag {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 1px 5px;
-            border-radius: 4px;
-            font-weight: 800;
-            font-size: 0.78rem;
-        }
-
-        /* ================================================= */
-        /* PANEL LATERAL DE CARRITO (DRAWER RESPONSIVO)       */
-        /* ================================================= */
-        .cart-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(4, 7, 13, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 120;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .cart-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .cart-drawer {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            max-width: 440px;
-            height: 100%;
-            background: #121824;
-            border-left: 1px solid var(--border-card);
-            box-shadow: -15px 0 35px rgba(0,0,0,0.7);
-            z-index: 130;
-            display: flex;
-            flex-direction: column;
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .cart-drawer.active {
-            transform: translateX(0);
-        }
-
-        .cart-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-card);
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .cart-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-close-cart {
-            background: rgba(255, 255, 255, 0.06);
-            border: none;
-            color: #fff;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 1.4rem;
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-        }
-
-        .cart-items-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .cart-empty-message {
-            text-align: center;
-            color: var(--text-muted);
-            margin: auto 0;
-            padding: 40px 16px;
-        }
-
-        .cart-empty-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
-
-        /* ITEM EN EL CARRITO */
-        .cart-item {
-            background: #172030;
-            border: 1px solid var(--border-card);
-            border-radius: 12px;
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cart-item-thumb {
-            width: 46px;
-            height: 64px;
-            border-radius: 6px;
-            overflow: hidden;
-            background: #000;
-            flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .cart-item-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cart-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .cart-item-title {
-            font-weight: 700;
-            font-size: 0.92rem;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .cart-item-sub {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .cart-item-price {
-            font-weight: 800;
-            color: #4ade80;
-            font-size: 0.88rem;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-qty {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-card);
-            color: #fff;
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            display: grid;
-            place-items: center;
-        }
-
-        .cart-item-qty {
-            font-weight: 700;
-            font-size: 0.9rem;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        .btn-item-delete {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            padding: 6px;
-            font-size: 1.15rem;
-            margin-left: 2px;
-        }
-
-        /* FOOTER DEL CARRITO */
-        .cart-footer {
-            padding: 16px 20px;
-            border-top: 1px solid var(--border-card);
-            background: #101622;
-        }
-
-        .cart-total-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-
-        .cart-total-label {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .cart-total-amount {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.9rem;
-            letter-spacing: 1px;
-            color: #4ade80;
-        }
-
-        .cart-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-cart-checkout {
-            flex: 2;
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: #fff;
-            border: none;
-            padding: 13px 10px;
-            border-radius: 12px;
-            font-family: inherit;
-            font-weight: 800;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-cart-checkout:hover {
-            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.6);
-            transform: translateY(-1px);
-        }
-
-        .btn-cart-clear {
-            flex: 1;
-            background: rgba(239, 68, 68, 0.12);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 13px 10px;
-            border-radius: 12px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
-        /* ================================================= */
-        /* MODAL VISOR EN ALTA RESOLUCIÓN                   */
-        /* ================================================= */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(4, 7, 13, 0.88);
-            backdrop-filter: blur(12px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 16px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-container {
-            background: #141b29;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes modalPop {
-            from { transform: scale(0.92) translateY(15px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: none;
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-        }
-
-        .modal-crop-viewer {
-            width: 240px;
-            aspect-ratio: 245 / 325;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-            margin: 8px 0 16px;
-            background: #0b0e14;
-        }
-
-        .modal-crop-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .modal-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 1px;
-            color: #fff;
-        }
-
-        .modal-subtitle {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 14px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .btn-modal {
-            flex: 1;
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            text-decoration: none;
-        }
-
-        .btn-modal.prev-next {
-            background: #1e293b;
-            color: #fff;
-            border: 1px solid var(--border-card);
-        }
-
-        .btn-modal.add {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARTAS COLECCIONABLES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --border-card: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --price-color: #fbbf24;
+      --whatsapp-green: #25d366;
+      --whatsapp-hover: #20ba5a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-bottom: 2px solid var(--border-card);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo .icon-badge {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+
+    .header-logo h1 {
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cart-btn-header {
+      position: relative;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .cart-btn-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+    }
+
+    .cart-badge {
+      background: #ef4444;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* FILTERS / SEARCH */
+    .toolbar-container {
+      max-width: 1300px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stats-info {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .stats-info strong {
+      color: var(--text-main);
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+      min-width: 240px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 16px 10px 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: #3b82f6;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      fill: var(--text-muted);
+    }
+
+    /* CATALOG GRID */
+    main {
+      flex: 1;
+      max-width: 1300px;
+      margin: 15px auto 40px;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .catalog-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .header-logo h1 {
+        font-size: 1.1rem;
+      }
+      .toolbar-container {
+        padding: 0 12px;
+      }
+      main {
+        padding: 0 12px;
+      }
+    }
+
+    /* CARD COMPONENT */
+    .card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .card-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+      border-color: #3b82f6;
+    }
+
+    .card-item.in-cart {
+      border-color: rgba(16, 185, 129, 0.6);
+    }
+
+    .card-badge-status {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #38bdf8;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 8px;
+    }
+
+    .card-incart-indicator {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 10;
+      background: #10b981;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+    }
+
+    .card-item.in-cart .card-incart-indicator {
+      display: block;
+    }
+
+    /* OVERFLOW CONTAINER FOR 3x3 GRID WITH 10px MARGIN */
+    /*
+      Original Sheet: 960x1280
+      Cells: 3 columns x 3 rows
+      Cell size: 320 x 426.67
+      Safety margin: 10px around the cell.
+      Viewport aspect ratio: 340 / 446.67 ≈ 0.76119
+    */
+    .card-overflow-box {
+      width: 100%;
+      aspect-ratio: 340 / 446.67;
+      overflow: hidden;
+      position: relative;
+      background: #090d16;
+      cursor: pointer;
+    }
+
+    .card-overflow-img {
+      position: absolute;
+      width: 282.3529%;   /* (960 / 340) * 100% */
+      height: 286.5672%;  /* (1280 / 446.67) * 100% */
+      max-width: none;
+      max-height: none;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .card-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+
+    .card-subtext {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* BUTTON AGREGAR Y PRECIO $500 DENTRO DEL BOTON */
+    .btn-add-cart {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-add-cart:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: scale(1.02);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-add-cart:active {
+      transform: scale(0.98);
+    }
+
+    .btn-add-cart .price-tag {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #fef08a;
+    }
+
+    /* SHOPPING CART DRAWER */
+    .cart-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 420px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #1e293b;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cart-drawer.active {
+      right: 0;
+    }
+
+    .cart-drawer-header {
+      padding: 18px 20px;
+      background: #0f172a;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-drawer-header h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .close-drawer-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .close-drawer-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .cart-items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-empty-message {
+      margin: auto;
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px 20px;
+    }
+
+    .cart-empty-message svg {
+      width: 60px;
+      height: 60px;
+      fill: #475569;
+      margin-bottom: 16px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      background: #0f172a;
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 10px;
+      gap: 12px;
+    }
+
+    .cart-item-thumb {
+      width: 52px;
+      height: 68px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      background: #020617;
+      flex-shrink: 0;
+    }
+
+    .cart-item-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cart-item-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cart-item-price-unit {
+      font-size: 0.8rem;
+      color: var(--price-color);
+      font-weight: 600;
+    }
+
+    .cart-qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      background: #334155;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .qty-btn:hover {
+      background: #475569;
+    }
+
+    .qty-number {
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .cart-item-subtotal {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .subtotal-amount {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+
+    .remove-item-btn {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .remove-item-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .cart-drawer-footer {
+      padding: 20px;
+      background: #0f172a;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .cart-total-label {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .cart-total-value {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--price-color);
+    }
+
+    .btn-checkout-whatsapp {
+      width: 100%;
+      background: var(--whatsapp-green);
+      color: white;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-checkout-whatsapp:hover {
+      background: var(--whatsapp-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    }
+
+    .btn-checkout-whatsapp:disabled {
+      background: #475569;
+      color: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-clear-cart {
+      background: transparent;
+      border: 1px solid var(--border-card);
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+
+    .btn-clear-cart:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    /* MODAL DE ZOOM / VISTA PREVIA */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 110;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      max-width: 440px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      animation: zoomIn 0.2s ease-out;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 14px 18px;
+      background: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .modal-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .modal-preview-box {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 340 / 446.67;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <div class="header-text">
-                <h1 class="header-title">CARTAS COLECCIONABLES</h1>
-                <p class="header-subtitle">Catálogo Oficial • 45 Cartas Disponibles</p>
+  <!-- HEADER -->
+  <header>
+    <div class="header-logo">
+      <div class="icon-badge">🃏</div>
+      <div>
+        <h1>CARTAS COLECCIONABLES</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="cart-btn-header" onclick="openCartDrawer()" title="Abrir Carrito">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+        <span>Carrito</span>
+        <span class="cart-badge" id="cartCountBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BARRA DE BUSQUEDA Y FILTRO -->
+  <div class="toolbar-container">
+    <div class="stats-info">
+      Mostrando <strong id="visibleCardsCount">333</strong> cartas individuales en catálogo
+    </div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar por N° de carta (ej: #042)..." oninput="handleSearch()">
+    </div>
+  </div>
+
+  <!-- CATALOGO DE CARTAS -->
+  <main>
+    <div class="catalog-grid" id="catalogGrid">
+      <!-- Se genera dinámicamente con JavaScript -->
+    </div>
+  </main>
+
+  <!-- CARRITO LATERAL (DRAWER) -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h2>
+        <span>🛒 Mi Carrito</span>
+      </h2>
+      <button class="close-drawer-btn" onclick="closeCartDrawer()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="cart-items-list" id="cartItemsList">
+      <!-- Elementos del carrito cargados por JS -->
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total a pagar:</span>
+        <span class="cart-total-value" id="cartTotalPrice">$ 0</span>
+      </div>
+      <button class="btn-checkout-whatsapp" id="btnCheckout" onclick="checkoutWhatsApp()">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+        </svg>
+        Enviar pedido por Whatsapp
+      </button>
+      <button class="btn-clear-cart" onclick="clearCart()">Vaciar Carrito</button>
+    </div>
+  </aside>
+
+  <!-- MODAL DE DETALLE / ZOOM -->
+  <div class="modal-overlay" id="previewModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modalCardTitle">Carta #001</h3>
+        <button class="close-drawer-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-preview-box" id="modalPreviewBox">
+          <!-- Vista con overflow posicionada -->
+        </div>
+        <p id="modalCardSheet" style="color: var(--text-muted); font-size: 0.85rem;"></p>
+        <button class="btn-add-cart" id="modalAddBtn">
+          <span>+ Agregar</span>
+          <span class="price-tag">$ 500</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICACIÓN -->
+  <div class="toast" id="toast">
+    <span>✓</span> <span id="toastMsg">Carta agregada al carrito</span>
+  </div>
+
+  <script>
+    // LISTA DE LAS 37 HOJAS EN cartas (3x3 = 9 cartas por hoja)
+    const SHEET_FILES = [
+      "cartas/043f07d3-46e5-4341-be66-33f2b8ca3178.jpg",
+      "cartas/085ba968-9377-4483-825c-d2eb32d676cc.jpg",
+      "cartas/094b9aa2-2dcb-48c7-9583-6dc9b9646255.jpg",
+      "cartas/0976bc23-0d0f-43e0-bf7e-5a0463c4ced7.jpg",
+      "cartas/16162535-c980-4364-a57a-3f365d6599f7.jpg",
+      "cartas/196fd32f-1109-42a5-82c3-c3bdf2f2ae7b.jpg",
+      "cartas/29ca9a74-1c9e-4d8f-8d91-5b0049d0a9f2.jpg",
+      "cartas/2d188490-1d84-4871-85cb-095769c6c4c7.jpg",
+      "cartas/2d4a82d1-3b49-49e4-aa5f-c7690cfbfc0c.jpg",
+      "cartas/2de382a4-e3c8-4db4-a1ae-d5e36e831759.jpg",
+      "cartas/322a4b29-8db0-407f-a9f4-cec3b99aa7bf.jpg",
+      "cartas/367178ca-1989-4e2e-a65d-b662d483d621.jpg",
+      "cartas/39f06c50-c3e6-409e-95bc-4c94536bd94c.jpg",
+      "cartas/4270a57b-f2cd-40ef-bb27-9aece0a4e2fd.jpg",
+      "cartas/4ba62e1b-ca1b-41a6-a3e5-61fa31186381.jpg",
+      "cartas/4ca4fa5f-0887-4892-a1bc-f686300c05d8.jpg",
+      "cartas/5683c3e4-2f89-4b43-9224-16122469d475.jpg",
+      "cartas/62fa1f23-4250-48fd-8b77-c2e0356e06c5.jpg",
+      "cartas/7663466c-85ee-4f7d-ad07-23e97c99e7be.jpg",
+      "cartas/88c98692-4ff5-44ba-9af5-fef2db84a239.jpg",
+      "cartas/90998276-da20-41ae-8b56-17e48a11be65.jpg",
+      "cartas/96a6620f-149e-42d9-bfef-ea6b4061ea01.jpg",
+      "cartas/9fb87827-0aa4-44c5-ab97-5acfe005722f.jpg",
+      "cartas/a4813b25-d626-4cfd-b5a6-8399c81fdbe6.jpg",
+      "cartas/ac18e79f-3197-4b4d-943c-3e2e69bb327e.jpg",
+      "cartas/c74ab52d-6b00-4741-b5d4-b1f253f83b1d.jpg",
+      "cartas/cb5224b5-3e29-44ea-b2ad-907f86a93348.jpg",
+      "cartas/ceaf4442-d52b-440f-abbc-b9b30f0aca80.jpg",
+      "cartas/d6812c61-a87e-4219-8781-791792e1d1c5.jpg",
+      "cartas/d80820dc-d24c-4cd1-996a-967515140cb4.jpg",
+      "cartas/d90403b3-be1a-4732-b088-a23e9949ca67.jpg",
+      "cartas/dc320383-e723-4685-969a-a3e081e41757.jpg",
+      "cartas/ef635687-280c-4e66-a746-fab0683cc234.jpg",
+      "cartas/f1234c16-3803-4b2b-b052-7e096bd53687.jpg",
+      "cartas/f91c38c5-12ba-4066-9176-02e8c252cb1d.jpg",
+      "cartas/fa391b8c-c68c-4964-b0dd-79d595bb43fa.jpg",
+      "cartas/fd957d9c-4238-4569-a686-2507ebb84c5d.jpg"
+    ];
+
+    const CARD_PRICE = 500;
+    const WHATSAPP_PHONE = "5491166069613";
+
+    // GENERAR ARRAY DE 333 CARTAS CON CÁLCULO DE OVERFLOW Y MARGEN +10px
+    /*
+      Dimensiones de cada hoja: 960 x 1280
+      3 columnas x 3 filas
+      Ancho nominal = 960 / 3 = 320px
+      Alto nominal = 1280 / 3 = 426.6667px
+      
+      Margen de seguridad adicional: 10px desde el borde
+      Ventana de recorte (viewport):
+      crop_w = 320 + 20 = 340px
+      crop_h = 426.6667 + 20 = 446.6667px
+      
+      Para la imagen dentro de la ventana de recorte:
+      left_px = (col * 320) - 10px
+      top_px = (row * 426.6667) - 10px
+      
+      En porcentaje del ancho y alto del contenedor recortado:
+      left% = - ( (col * 320 - 10) / 340 ) * 100%
+      top%  = - ( (row * 426.6667 - 10) / 446.6667 ) * 100%
+      width% de la imagen completa = (960 / 340) * 100% = 282.3529%
+      height% de la imagen completa = (1280 / 446.6667) * 100% = 286.5672%
+    */
+    const cards = [];
+    let globalCardId = 1;
+
+    SHEET_FILES.forEach((sheetSrc, sheetIndex) => {
+      const sheetNum = sheetIndex + 1;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          const leftPercent = -((col * 320 - 10) / 340) * 100;
+          const topPercent = -((row * 426.6667 - 10) / 446.6667) * 100;
+
+          cards.push({
+            id: globalCardId,
+            code: `#${String(globalCardId).padStart(3, '0')}`,
+            sheetNum: sheetNum,
+            sheetSrc: sheetSrc,
+            row: row,
+            col: col,
+            price: CARD_PRICE,
+            style: {
+              left: `${leftPercent.toFixed(4)}%`,
+              top: `${topPercent.toFixed(4)}%`
+            }
+          });
+          globalCardId++;
+        }
+      }
+    });
+
+    // ESTADO DEL CARRITO: { cardId: quantity }
+    let cart = {};
+
+    // INICIALIZACIÓN
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCatalog(cards);
+      updateCartUI();
+    });
+
+    // RENDERIZAR CATÁLOGO COMPLETO
+    function renderCatalog(cardsToRender) {
+      const grid = document.getElementById('catalogGrid');
+      grid.innerHTML = '';
+
+      const fragment = document.createDocumentFragment();
+
+      cardsToRender.forEach(card => {
+        const inCartQty = cart[card.id] || 0;
+        const cardEl = document.createElement('div');
+        cardEl.className = `card-item ${inCartQty > 0 ? 'in-cart' : ''}`;
+        cardEl.id = `card-card-${card.id}`;
+
+        cardEl.innerHTML = `
+          <div class="card-badge-status">${card.code}</div>
+          <div class="card-incart-indicator" id="incart-badge-${card.id}">✓ ${inCartQty} en carrito</div>
+          
+          <div class="card-overflow-box" onclick="openPreview(${card.id})" title="Click para ver en detalle">
+            <img class="card-overflow-img" 
+                 src="${card.sheetSrc}" 
+                 loading="lazy" 
+                 alt="${card.code}"
+                 style="left: ${card.style.left}; top: ${card.style.top};">
+          </div>
+
+          <div class="card-info">
+            <div class="card-meta">
+              <span class="card-title">Carta ${card.code}</span>
+              <span class="card-subtext">Hoja ${card.sheetNum}</span>
             </div>
-            <button class="btn-cart-toggle" onclick="abrirCarrito()">
-                🛒 <span class="cart-btn-label">Carrito</span> <span class="cart-badge" id="cartBadgeCount">0</span>
+            <button class="btn-add-cart" onclick="addToCart(${card.id})">
+              <span>+ Agregar</span>
+              <span class="price-tag">$ ${card.price}</span>
             </button>
-        </div>
-    </header>
+          </div>
+        `;
 
-    <div class="controls-container">
-        <div class="filter-buttons">
-            <button class="btn-filter active" onclick="filtrarLamina('todas', this)">Todas (45)</button>
-            <button class="btn-filter" onclick="filtrarLamina(1, this)">Lámina 1 (#01-#09)</button>
-            <button class="btn-filter" onclick="filtrarLamina(2, this)">Lámina 2 (#10-#18)</button>
-            <button class="btn-filter" onclick="filtrarLamina(3, this)">Lámina 3 (#19-#27)</button>
-            <button class="btn-filter" onclick="filtrarLamina(4, this)">Lámina 4 (#28-#36)</button>
-            <button class="btn-filter" onclick="filtrarLamina(5, this)">Lámina 5 (#37-#45)</button>
-        </div>
+        fragment.appendChild(cardEl);
+      });
 
-        <div class="search-box">
-            <svg viewBox="0 0 24 24"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"/></svg>
-            <input type="text" id="searchInput" placeholder="Buscar por # o lámina..." oninput="buscarFiguritas()">
-        </div>
-    </div>
+      grid.appendChild(fragment);
+      document.getElementById('visibleCardsCount').textContent = cardsToRender.length;
+    }
 
-    <div class="stats-bar">
-        <div class="stat-item">Cartas visibles: <strong id="countVisibles">45</strong> / 45</div>
-        <div class="stat-item">Precio: <strong style="color: #4ade80;">$ 500 c/u</strong></div>
-    </div>
+    // BUSCADOR
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!query) {
+        renderCatalog(cards);
+        return;
+      }
+      const filtered = cards.filter(c => {
+        return c.code.toLowerCase().includes(query) || 
+               String(c.id).includes(query) ||
+               `hoja ${c.sheetNum}`.includes(query);
+      });
+      renderCatalog(filtered);
+    }
 
-    <!-- GRID DE CARTAS (NO SE QUITAN AL COMPRAR) -->
-    <main class="cards-grid" id="cardsGrid"></main>
+    // GESTIÓN DEL CARRITO
+    function addToCart(cardId) {
+      if (!cart[cardId]) {
+        cart[cardId] = 0;
+      }
+      cart[cardId] += 1;
 
-    <!-- PANEL LATERAL DE CARRITO DE COMPRAS -->
-    <div class="cart-overlay" id="cartOverlay" onclick="cerrarCarrito()"></div>
-    <aside class="cart-drawer" id="cartDrawer">
-        <div class="cart-header">
-            <div class="cart-title">
-                🛒 MI CARRITO (<span id="cartTotalItemsCount">0</span>)
+      // Actualizar tarjeta en catálogo (NO QUITAR DE LA PÁGINA)
+      updateCatalogCardIndicator(cardId);
+      updateCartUI();
+      showToast(`¡Carta #${String(cardId).padStart(3, '0')} agregada!`);
+    }
+
+    function changeQuantity(cardId, delta) {
+      if (!cart[cardId]) return;
+      cart[cardId] += delta;
+      if (cart[cardId] <= 0) {
+        delete cart[cardId];
+      }
+      updateCatalogCardIndicator(cardId);
+      updateCartUI();
+    }
+
+    function removeFromCart(cardId) {
+      if (cart[cardId]) {
+        delete cart[cardId];
+      }
+      updateCatalogCardIndicator(cardId);
+      updateCartUI();
+    }
+
+    function clearCart() {
+      if (confirm('¿Deseas vaciar todos los artículos del carrito?')) {
+        const oldIds = Object.keys(cart);
+        cart = {};
+        oldIds.forEach(id => updateCatalogCardIndicator(id));
+        updateCartUI();
+      }
+    }
+
+    function updateCatalogCardIndicator(cardId) {
+      const cardEl = document.getElementById(`card-card-${cardId}`);
+      const badgeEl = document.getElementById(`incart-badge-${cardId}`);
+      const qty = cart[cardId] || 0;
+
+      if (cardEl) {
+        if (qty > 0) {
+          cardEl.classList.add('in-cart');
+          if (badgeEl) badgeEl.textContent = `✓ ${qty} en carrito`;
+        } else {
+          cardEl.classList.remove('in-cart');
+        }
+      }
+    }
+
+    function updateCartUI() {
+      const itemsList = document.getElementById('cartItemsList');
+      const badgeCount = document.getElementById('cartCountBadge');
+      const totalPriceEl = document.getElementById('cartTotalPrice');
+      const checkoutBtn = document.getElementById('btnCheckout');
+
+      const cardIds = Object.keys(cart);
+      let totalItems = 0;
+      let grandTotal = 0;
+
+      if (cardIds.length === 0) {
+        itemsList.innerHTML = `
+          <div class="cart-empty-message">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/>
+            </svg>
+            <p>El carrito está vacío</p>
+            <small style="color: var(--text-muted); display: block; margin-top: 6px;">Agrega cartas con el botón "+ Agregar"</small>
+          </div>
+        `;
+        badgeCount.textContent = '0';
+        totalPriceEl.textContent = '$ 0';
+        checkoutBtn.disabled = true;
+        return;
+      }
+
+      checkoutBtn.disabled = false;
+      itemsList.innerHTML = '';
+
+      cardIds.forEach(idStr => {
+        const id = parseInt(idStr);
+        const qty = cart[id];
+        const card = cards.find(c => c.id === id);
+        if (!card) return;
+
+        totalItems += qty;
+        const subtotal = qty * card.price;
+        grandTotal += subtotal;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item-row';
+        row.innerHTML = `
+          <div class="cart-item-thumb">
+            <img class="card-overflow-img" 
+                 src="${card.sheetSrc}" 
+                 alt="${card.code}"
+                 style="left: ${card.style.left}; top: ${card.style.top};">
+          </div>
+          <div class="cart-item-details">
+            <div class="cart-item-name">Carta ${card.code}</div>
+            <div class="cart-item-price-unit">$ ${card.price} c/u</div>
+            <div class="cart-qty-controls">
+              <button class="qty-btn" onclick="changeQuantity(${card.id}, -1)">-</button>
+              <span class="qty-number">${qty}</span>
+              <button class="qty-btn" onclick="changeQuantity(${card.id}, 1)">+</button>
             </div>
-            <button class="btn-close-cart" onclick="cerrarCarrito()">&times;</button>
-        </div>
+          </div>
+          <div class="cart-item-subtotal">
+            <span class="subtotal-amount">$ ${subtotal}</span>
+            <button class="remove-item-btn" onclick="removeFromCart(${card.id})" title="Quitar">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+            </button>
+          </div>
+        `;
+        itemsList.appendChild(row);
+      });
 
-        <div class="cart-items-container" id="cartItemsContainer"></div>
+      badgeCount.textContent = totalItems;
+      totalPriceEl.textContent = `$ ${grandTotal}`;
+    }
 
-        <div class="cart-footer">
-            <div class="cart-total-row">
-                <span class="cart-total-label">Total a pagar:</span>
-                <span class="cart-total-amount" id="cartTotalAmount">$ 0</span>
-            </div>
-            <div class="cart-actions">
-                <button class="btn-cart-clear" onclick="vaciarCarrito()">Vaciar</button>
-                <button class="btn-cart-checkout" onclick="comprarPorWhatsApp()">
-                    💬 Comprar Ahora
-                </button>
-            </div>
-        </div>
-    </aside>
+    // APERTURA Y CIERRE DE CARRITO
+    function openCartDrawer() {
+      document.getElementById('cartDrawer').classList.add('active');
+      document.getElementById('cartDrawerOverlay').classList.add('active');
+    }
 
-    <!-- MODAL DETALLE / VISOR INDIVIDUAL -->
-    <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal(event)">
-        <div class="modal-container" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="cerrarModal()">&times;</button>
-            <div class="modal-title" id="modalTitle">CARTA #01</div>
-            <div class="modal-subtitle" id="modalSubtitle">Lámina 01.jpg • Fila 1, Columna 1</div>
-            
-            <div class="modal-crop-viewer">
-                <img class="modal-crop-image" id="modalCropImage" src="" alt="Carta">
-            </div>
+    function closeCartDrawer() {
+      document.getElementById('cartDrawer').classList.remove('active');
+      document.getElementById('cartDrawerOverlay').classList.remove('active');
+    }
 
-            <div class="modal-actions">
-                <button class="btn-modal prev-next" onclick="navegarModal(-1)">◀ Anterior</button>
-                <button class="btn-modal add" onclick="agregarAlCarrito(currentModalId); abrirCarrito();">🛒 Agregar • $ 500</button>
-                <button class="btn-modal prev-next" onclick="navegarModal(1)">Siguiente ▶</button>
-            </div>
-        </div>
-    </div>
+    // MODAL PREVIEW
+    function openPreview(cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
 
-    <script>
-        const PRECIO_CARTA = 500;
-        // Número de WhatsApp receptor: 11-6606-9613 (+54 9 11 6606-9613)
-        const WHATSAPP_NUMERO = "5491166069613";
+      document.getElementById('modalCardTitle').textContent = `Carta ${card.code}`;
+      document.getElementById('modalCardSheet').textContent = `Ubicación: Hoja ${card.sheetNum} (Fila ${card.row + 1}, Columna ${card.col + 1})`;
+      
+      const previewBox = document.getElementById('modalPreviewBox');
+      previewBox.innerHTML = `
+        <img class="card-overflow-img" 
+             src="${card.sheetSrc}" 
+             alt="${card.code}"
+             style="left: ${card.style.left}; top: ${card.style.top};">
+      `;
 
-        // Configuración de recortes de láminas
-        const laminasConfig = {
-            1: { file: '01.jpg', xCols: [[42, 248], [263, 470], [485, 692]], yRows: [[190, 475], [485, 770], [780, 1065]] },
-            2: { file: '02.jpg', xCols: [[35, 245], [260, 470], [485, 695]], yRows: [[185, 470], [480, 765], [775, 1060]] },
-            3: { file: '03.jpg', xCols: [[45, 255], [265, 475], [485, 695]], yRows: [[175, 460], [470, 755], [765, 1050]] },
-            4: { file: '04.jpg', xCols: [[30, 240], [250, 460], [470, 680]], yRows: [[150, 435], [445, 730], [740, 1025]] },
-            5: { file: '05.jpg', xCols: [[40, 250], [260, 470], [480, 690]], yRows: [[195, 480], [490, 775], [785, 1070]] }
-        };
+      const addBtn = document.getElementById('modalAddBtn');
+      addBtn.onclick = () => {
+        addToCart(card.id);
+        closeModal();
+      };
 
-        const figuritas = [];
-        let idGlobal = 1;
+      document.getElementById('previewModal').classList.add('active');
+    }
 
-        for (let numLamina = 1; numLamina <= 5; numLamina++) {
-            const cfg = laminasConfig[numLamina];
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    const idStr = String(idGlobal).padStart(2, '0');
-                    figuritas.push({
-                        id: idGlobal,
-                        idStr: idStr,
-                        numLamina: numLamina,
-                        file: cfg.file,
-                        row: row + 1,
-                        col: col + 1,
-                        price: PRECIO_CARTA,
-                        imgPath: `cartas2/carta_${idStr}.png`,
-                        coords: {
-                            x: cfg.xCols[col][0],
-                            y: cfg.yRows[row][0],
-                            w: cfg.xCols[col][1] - cfg.xCols[col][0],
-                            h: cfg.yRows[row][1] - cfg.yRows[row][0]
-                        }
-                    });
-                    idGlobal++;
-                }
-            }
+    function closeModal(e) {
+      document.getElementById('previewModal').classList.remove('active');
+    }
+
+    // MENSAJE TOAST
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+
+    // CHECKOUT WHATSAPP: 11-6606-9613
+    function checkoutWhatsApp() {
+      const cardIds = Object.keys(cart);
+      if (cardIds.length === 0) {
+        alert("El carrito está vacío. Agrega al menos una carta para comprar.");
+        return;
+      }
+
+      let lineas = [];
+      let totalGral = 0;
+      let totalUnidades = 0;
+
+      cardIds.forEach(idStr => {
+        const id = parseInt(idStr);
+        const qty = cart[id];
+        const card = cards.find(c => c.id === id);
+        if (card) {
+          const sub = qty * card.price;
+          totalGral += sub;
+          totalUnidades += qty;
+          lineas.push(`• Carta ${card.code} (x${qty}) -> $${sub}`);
         }
+      });
 
-        // Carrito en localStorage
-        let carrito = JSON.parse(localStorage.getItem('cart_stickers') || '{}');
-        let currentModalId = 1;
-        const grid = document.getElementById('cardsGrid');
+      const mensaje = 
+`👋 ¡Hola! Quiero realizar la compra de CARTAS COLECCIONABLES:
 
-        function renderizarFiguritas(lista) {
-            grid.innerHTML = '';
-            document.getElementById('countVisibles').textContent = lista.length;
+${lineas.join('\n')}
 
-            lista.forEach(fig => {
-                const qtyInCart = carrito[fig.id] || 0;
-                const isInCart = qtyInCart > 0;
+---------------------------
+📦 Total de Cartas: ${totalUnidades}
+💰 Total a pagar: $${totalGral}
 
-                const card = document.createElement('div');
-                card.className = `sticker-card ${isInCart ? 'in-cart' : ''}`;
-                card.id = `card-${fig.id}`;
-                card.onclick = () => abrirModal(fig.id);
+Aguardo los datos de pago y coordinación para la entrega. ¡Muchas gracias!`;
 
-                card.innerHTML = `
-                    <div class="in-cart-indicator" id="indicator-${fig.id}">
-                        ✓ En carrito (${qtyInCart})
-                    </div>
-                    <div class="crop-viewport">
-                        <img 
-                            class="crop-image" 
-                            src="${fig.imgPath}" 
-                            alt="Carta #${fig.idStr}" 
-                            loading="lazy"
-                            onerror="fallbackCanvasCrop(this, ${fig.id})"
-                        />
-                    </div>
-                    <div class="card-info">
-                        <span class="card-number">#${fig.idStr}</span>
-                        <span class="card-sheet">Lámina ${fig.numLamina}</span>
-                    </div>
-                    <button class="btn-add-cart" onclick="btnAgregarClick(event, ${fig.id})">
-                        <span>+ Agregar</span>
-                        <span class="price-tag">$ ${fig.price}</span>
-                    </button>
-                `;
-
-                grid.appendChild(card);
-            });
-
-            actualizarCarritoUI();
-        }
-
-        function fallbackCanvasCrop(imgEl, id) {
-            const fig = figuritas.find(f => f.id === id);
-            if (!fig) return;
-
-            const baseImg = new Image();
-            baseImg.src = fig.file;
-            baseImg.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = fig.coords.w;
-                canvas.height = fig.coords.h;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(
-                    baseImg,
-                    fig.coords.x, fig.coords.y, fig.coords.w, fig.coords.h,
-                    0, 0, fig.coords.w, fig.coords.h
-                );
-                imgEl.src = canvas.toDataURL('image/png');
-            };
-        }
-
-        function btnAgregarClick(event, id) {
-            event.stopPropagation();
-            agregarAlCarrito(id);
-        }
-
-        function agregarAlCarrito(id) {
-            carrito[id] = (carrito[id] || 0) + 1;
-            guardarCarrito();
-            actualizarCardIndicator(id);
-            actualizarCarritoUI();
-        }
-
-        function modificarCantidad(id, delta) {
-            if (!carrito[id]) return;
-            carrito[id] += delta;
-            if (carrito[id] <= 0) {
-                delete carrito[id];
-            }
-            guardarCarrito();
-            actualizarCardIndicator(id);
-            actualizarCarritoUI();
-        }
-
-        function eliminarDelCarrito(id) {
-            delete carrito[id];
-            guardarCarrito();
-            actualizarCardIndicator(id);
-            actualizarCarritoUI();
-        }
-
-        function vaciarCarrito() {
-            if (Object.keys(carrito).length === 0) return;
-            if (confirm("¿Deseas vaciar todas las cartas del carrito?")) {
-                carrito = {};
-                guardarCarrito();
-                document.querySelectorAll('.sticker-card').forEach(c => c.classList.remove('in-cart'));
-                document.querySelectorAll('.in-cart-indicator').forEach(i => i.style.display = 'none');
-                actualizarCarritoUI();
-            }
-        }
-
-        /* ENVÍO DEL PEDIDO A WHATSAPP */
-        function comprarPorWhatsApp() {
-            const ids = Object.keys(carrito).map(Number);
-            if (ids.length === 0) {
-                alert("El carrito está vacío. Agrega al menos una carta para realizar la compra.");
-                return;
-            }
-
-            let totalCartas = 0;
-            let totalPesos = 0;
-            let lineasDetalle = [];
-
-            // Ordenar por ID de carta
-            ids.sort((a, b) => a - b).forEach(id => {
-                const fig = figuritas.find(f => f.id === id);
-                if (!fig) return;
-                const qty = carrito[id];
-                const subtotal = qty * PRECIO_CARTA;
-                totalCartas += qty;
-                totalPesos += subtotal;
-
-                lineasDetalle.push(`• Carta #${fig.idStr} (Lámina ${fig.numLamina}) x${qty} = $ ${subtotal.toLocaleString('es-AR')}`);
-            });
-
-            // Armar texto del mensaje
-            const fechaStr = new Date().toLocaleDateString('es-AR', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            });
-
-            const mensaje = 
-`*¡Hola! Quiero comprar las siguientes Cartas Coleccionables:*
-
-${lineasDetalle.join('\n')}
-
-━━━━━━━━━━━━━━━━━━━━
-*Total de cartas:* ${totalCartas}
-*Monto Total:* $ ${totalPesos.toLocaleString('es-AR')}
-━━━━━━━━━━━━━━━━━━━━
-_Fecha pedido: ${fechaStr}_
-
-¿Me confirmas disponibilidad y medios de pago? ¡Muchas gracias!`;
-
-            // Enlace de WhatsApp
-            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(mensaje)}`;
-
-            // Abrir en nueva pestaña / app de WhatsApp
-            window.open(urlWhatsApp, '_blank');
-        }
-
-        function guardarCarrito() {
-            localStorage.setItem('cart_stickers', JSON.stringify(carrito));
-        }
-
-        function actualizarCardIndicator(id) {
-            const card = document.getElementById(`card-${id}`);
-            const indicator = document.getElementById(`indicator-${id}`);
-            const qty = carrito[id] || 0;
-            if (card && indicator) {
-                if (qty > 0) {
-                    card.classList.add('in-cart');
-                    indicator.textContent = `✓ En carrito (${qty})`;
-                    indicator.style.display = 'block';
-                } else {
-                    card.classList.remove('in-cart');
-                    indicator.style.display = 'none';
-                }
-            }
-        }
-
-        function actualizarCarritoUI() {
-            const container = document.getElementById('cartItemsContainer');
-            const totalAmountEl = document.getElementById('cartTotalAmount');
-            const badgeEl = document.getElementById('cartBadgeCount');
-            const totalItemsHeader = document.getElementById('cartTotalItemsCount');
-
-            const ids = Object.keys(carrito).map(Number);
-            let totalCartas = 0;
-            let totalPesos = 0;
-
-            container.innerHTML = '';
-
-            if (ids.length === 0) {
-                container.innerHTML = `
-                    <div class="cart-empty-message">
-                        <div class="cart-empty-icon">🛒</div>
-                        <p>Tu carrito está vacío.</p>
-                        <p style="font-size: 0.8rem; margin-top: 6px;">Toca en <strong>+ Agregar</strong> en las cartas que desees comprar.</p>
-                    </div>
-                `;
-            } else {
-                ids.sort((a, b) => a - b).forEach(id => {
-                    const fig = figuritas.find(f => f.id === id);
-                    if (!fig) return;
-                    const qty = carrito[id];
-                    const subtotal = qty * PRECIO_CARTA;
-
-                    totalCartas += qty;
-                    totalPesos += subtotal;
-
-                    const item = document.createElement('div');
-                    item.className = 'cart-item';
-                    item.innerHTML = `
-                        <div class="cart-item-thumb">
-                            <img src="${fig.imgPath}" alt="Carta #${fig.idStr}">
-                        </div>
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">Carta #${fig.idStr}</div>
-                            <div class="cart-item-sub">Lámina ${fig.numLamina} • $ ${PRECIO_CARTA} c/u</div>
-                            <div class="cart-item-price">$ ${subtotal.toLocaleString('es-AR')}</div>
-                        </div>
-                        <div class="cart-item-controls">
-                            <button class="btn-qty" onclick="modificarCantidad(${fig.id}, -1)">−</button>
-                            <span class="cart-item-qty">${qty}</span>
-                            <button class="btn-qty" onclick="modificarCantidad(${fig.id}, 1)">+</button>
-                            <button class="btn-item-delete" onclick="eliminarDelCarrito(${fig.id})" title="Quitar">🗑</button>
-                        </div>
-                    `;
-                    container.appendChild(item);
-                });
-            }
-
-            badgeEl.textContent = totalCartas;
-            totalItemsHeader.textContent = totalCartas;
-            totalAmountEl.textContent = `$ ${totalPesos.toLocaleString('es-AR')}`;
-        }
-
-        function abrirCarrito() {
-            document.getElementById('cartOverlay').classList.add('active');
-            document.getElementById('cartDrawer').classList.add('active');
-        }
-
-        function cerrarCarrito() {
-            document.getElementById('cartOverlay').classList.remove('active');
-            document.getElementById('cartDrawer').classList.remove('active');
-        }
-
-        // Filtro por Lámina
-        let filtroLaminaActual = 'todas';
-        function filtrarLamina(numLamina, btn) {
-            filtroLaminaActual = numLamina;
-            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            aplicarFiltros();
-        }
-
-        // Buscador
-        function buscarFiguritas() {
-            aplicarFiltros();
-        }
-
-        function aplicarFiltros() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            let filtrados = figuritas;
-
-            if (filtroLaminaActual !== 'todas') {
-                filtrados = filtrados.filter(f => f.numLamina === filtroLaminaActual);
-            }
-
-            if (query) {
-                filtrados = filtrados.filter(f => {
-                    const matchId = String(f.id).includes(query.replace('#', '')) || f.idStr.includes(query);
-                    const matchSheet = `lamina ${f.numLamina}`.includes(query) || f.file.toLowerCase().includes(query);
-                    return matchId || matchSheet;
-                });
-            }
-
-            renderizarFiguritas(filtrados);
-        }
-
-        // MODAL DETALLE
-        function abrirModal(id) {
-            currentModalId = id;
-            const fig = figuritas.find(f => f.id === id);
-            if (!fig) return;
-
-            document.getElementById('modalTitle').textContent = `CARTA #${fig.idStr}`;
-            document.getElementById('modalSubtitle').textContent = `Lámina ${fig.file} • Fila ${fig.row}, Columna ${fig.col}`;
-
-            const imgEl = document.getElementById('modalCropImage');
-            imgEl.src = fig.imgPath;
-            imgEl.onerror = () => fallbackCanvasCrop(imgEl, fig.id);
-
-            document.getElementById('modalOverlay').classList.add('active');
-        }
-
-        function cerrarModal(e) {
-            if (e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        function navegarModal(delta) {
-            let nuevoId = currentModalId + delta;
-            if (nuevoId < 1) nuevoId = 45;
-            if (nuevoId > 45) nuevoId = 1;
-            abrirModal(nuevoId);
-        }
-
-        // Teclado (ESC y Flechas)
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                cerrarModal();
-                cerrarCarrito();
-            }
-            const modal = document.getElementById('modalOverlay');
-            if (modal.classList.contains('active')) {
-                if (e.key === 'ArrowLeft') navegarModal(-1);
-                if (e.key === 'ArrowRight') navegarModal(1);
-            }
-        });
-
-        // Inicializar
-        renderizarFiguritas(figuritas);
-    </script>
+      const urlWhatsApp = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(mensaje)}`;
+      window.open(urlWhatsApp, '_blank');
+    }
+  </script>
 </body>
 </html>
